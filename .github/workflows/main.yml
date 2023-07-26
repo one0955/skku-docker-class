@@ -3,7 +3,7 @@ name: Continuous Deployment
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-deploy:
@@ -42,16 +42,3 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
-
-      # Docker Hub에서 이미지 내려받기 및 실행
-      - name: Pull and run Docker image from Docker Hub
-        run: |
-          function stop_and_pull_run_image() {
-            CONTAINER_ID=$(docker ps -q --filter ancestor=dianalove/fastapi_git:latest)
-            if [ ! -z "$CONTAINER_ID" ]; then
-              docker stop $CONTAINER_ID
-            fi
-            docker pull dianalove/fastapi_git:latest
-            docker run -d -p 80:80 dianalove/fastapi_git:latest
-          }
-          stop_and_pull_run_image
